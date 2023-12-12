@@ -30,3 +30,4 @@ jobs:
           git --version
           if [[ "RTB" == "RTB" ]]; then
             echo "Creating RTB Pull Requests..."
+          fi
