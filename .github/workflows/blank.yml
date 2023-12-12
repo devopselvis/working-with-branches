@@ -13,12 +13,12 @@ on:
       city:
         description: "Favorite city"
         required: true
-        default: "Tupelo"
+        default: 'Tupelo'
         type: choice
         options:
-        - New York
-        - Seattle
-        - Tupelo
+        - 'New York'
+        - 'Seattle'
+        - 'Tupelo'
 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
