@@ -40,7 +40,7 @@ jobs:
           # Set your variables
           owner="devopselvis"
           repo="working-with-branches"
-          token="${{secrets.SATOKEN}}"
+          token="${{secrets.GITHUB_TOKEN}}"
           base_branch=${{github.head_ref}}
           new_branch=${{github.head_ref}}-dev
 
