@@ -6,20 +6,10 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
 
-
+  pull_request:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-    inputs:
-      city:
-        description: "Favorite city"
-        required: true
-        default: 'Tupelo'
-        type: choice
-        options:
-        - 'New York'
-        - 'Seattle'
-        - 'Tupelo'
-
+    
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -46,6 +36,23 @@ jobs:
           current_branch=$(git symbolic-ref --short HEAD)
           echo "current branch"
           echo $current_branch
+
+          #create a DEV branch of this hotfix branch
+          # Set your variables
+          owner="mickeygousset"
+          repo="working-with-branches"
+          token="${{secrets.SATOKEN}}"
+          base_branch=$current_branch
+          new_branch=${current_branch}-dev
+
+          # Get the SHA of the latest commit on the base branch
+          sha=$(curl -s -H "Authorization: token $token" \
+           https://api.github.com/repos/$owner/$repo/git/ref/heads/$base_branch | jq -r '.object.sha')
+
+          # Create a new reference (branch) with that SHA
+          curl -X POST -H "Authorization: token $token" \
+               -d "{\"ref\": \"refs/heads/$new_branch\", \"sha\": \"$sha\"}" \
+               https://api.github.com/repos/$owner/$repo/git/refs
           
           
 
