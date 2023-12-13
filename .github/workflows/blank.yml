@@ -48,7 +48,8 @@ jobs:
 
           # Get the SHA of the latest commit on the base branch
           echo "getting the sha"
-          sha=$(curl -s -H "Authorization: token $token" https://api.github.com/repos/$owner/$repo/git/ref/heads/$base_branch | jq -r '.object.sha')
+          #sha=$(curl -s -H "Authorization: token $token" https://api.github.com/repos/$owner/$repo/git/ref/heads/$base_branch | jq -r '.object.sha')
+          sha=${{github.sha}}
           echo $sha
 
           # Create a new reference (branch) with that SHA
