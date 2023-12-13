@@ -54,9 +54,12 @@ jobs:
           echo $sha
 
           # Create a new reference (branch) with that SHA
+          echo "creating ref branch"
           curl -X POST -H "Authorization: token $token" -d "{\"ref\": \"refs/heads/$new_branch\", \"sha\": \"$sha\"}" https://api.github.com/repos/$owner/$repo/git/refs
+          echo "finish ref branch creation"
           
           # Create PR to DEV branch
-          curl -s -X POST -H "Accept: application/vnd.github.v3+json" -H "Authorization: token $token" -d { \"title\": \"Merge commit from $new_branch to DEV\", \"head\": \"$new_branch\", \"base\": \"DEV\"} https://api.github.com/repos/$owner/$repo/pulls
-
+          echo "before PR creation to DEV"
+          curl -s -X POST -H "Authorization: token $token" -d { \"title\": \"Merge commit from $new_branch to DEV\", \"head\": \"$new_branch\", \"base\": \"DEV\"} https://api.github.com/repos/$owner/$repo/pulls
+          echo "after PR creation to DEV"
           
