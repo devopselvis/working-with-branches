@@ -47,13 +47,12 @@ jobs:
           new_branch=${{github.head_ref}}-dev
 
           # Get the SHA of the latest commit on the base branch
-          sha=$(curl -s -H "Authorization: token $token" \
-           https://api.github.com/repos/$owner/$repo/git/ref/heads/$base_branch | jq -r '.object.sha')
+          echo "getting the sha"
+          sha=$(curl -s -H "Authorization: token $token" https://api.github.com/repos/$owner/$repo/git/ref/heads/$base_branch | jq -r '.object.sha')
+          echo $sha
 
           # Create a new reference (branch) with that SHA
-          curl -X POST -H "Authorization: token $token" \
-               -d "{\"ref\": \"refs/heads/$new_branch\", \"sha\": \"$sha\"}" \
-               https://api.github.com/repos/$owner/$repo/git/refs
+          curl -X POST -H "Authorization: token $token" -d "{\"ref\": \"refs/heads/$new_branch\", \"sha\": \"$sha\"}" https://api.github.com/repos/$owner/$repo/git/refs
           
           
 
