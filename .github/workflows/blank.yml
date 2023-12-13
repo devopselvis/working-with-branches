@@ -63,3 +63,5 @@ jobs:
           curl -s -X POST -H "Authorization: token $token" -d "{ \"title\": \"Merge commit from $new_branch to DEV\", \"head\": \"$new_branch\", \"base\": \"DEV\"}" https://api.github.com/repos/$owner/$repo/pulls
           echo "after PR creation to DEV"
           
+          echo "I want this to appear on the workflow summary page" >> $GITHUB_STEP_SUMMARY
+          echo ${{github.sha}} >> $GITHUB_STEP_SUMMARY
