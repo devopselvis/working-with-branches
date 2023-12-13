@@ -37,10 +37,8 @@ jobs:
           echo "workspace"
           echo ${{github.workspace}}
 
-
-          #create a DEV branch of this hotfix branch
           # Set your variables
-          owner="mickeygousset"
+          owner="devopselvis"
           repo="working-with-branches"
           token="${{secrets.SATOKEN}}"
           base_branch=${{github.head_ref}}
@@ -50,21 +48,13 @@ jobs:
           echo $new_branch
 
           # Get the SHA of the latest commit on the base branch
-          sha=$(gh api repos/$owner/$repo/git/ref/heads/$base_branch --jq '.object.sha')
-  
-          # Create a new reference (branch) with that SHA
-          gh api -X POST /repos/$owner/$repo/git/refs -f ref=refs/heads/$new_branch -f sha=$sha
-
-          # Get the SHA of the latest commit on the base branch
-          #echo "getting the sha"
+          echo "getting the sha"
           #sha=$(curl -s -H "Authorization: token $token" https://api.github.com/repos/$owner/$repo/git/ref/heads/$base_branch | jq -r '.object.sha')
-          #sha=${{github.sha}}
-          #echo $sha
+          sha=${{github.sha}}
+          echo $sha
 
           # Create a new reference (branch) with that SHA
-          #curl -X POST -H "Authorization: token $token" -d "{\"ref\": \"refs/heads/$new_branch\", \"sha\": \"$sha\"}" https://api.github.com/repos/$owner/$repo/git/refs
-        env:
-          GH_TOKEN: ${{ github.token }}
+          curl -X POST -H "Authorization: token $token" -d "{\"ref\": \"refs/heads/$new_branch\", \"sha\": \"$sha\"}" https://api.github.com/repos/$owner/$repo/git/refs
           
           
 
