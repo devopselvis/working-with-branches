@@ -60,6 +60,6 @@ jobs:
           
           # Create PR to DEV branch
           echo "before PR creation to DEV"
-          curl -s -X POST -H "Authorization: token $token" -d "{ \"title\": \"Merge commit from testing-dev to DEV\", \"head\": \"testing-dev\", \"base\": \"DEV\"}" https://api.github.com/repos/$owner/$repo/pulls
+          curl -s -X POST -H "Authorization: token $token" -d "{ \"title\": \"Merge commit from $new_branch to DEV\", \"head\": \"$new_branch\", \"base\": \"DEV\"}" https://api.github.com/repos/$owner/$repo/pulls
           echo "after PR creation to DEV"
           
