@@ -66,8 +66,12 @@ jobs:
           
           # Create PR to DEV branch
           echo "before PR creation to DEV"
-          curl -s -X POST -H "Authorization: token $token" -d "{ \"title\": \"Merge commit from $new_branch to QA\", \"head\": \"$new_branch\", \"base\": \"QA\"}" https://api.github.com/repos/$owner/$repo/pulls
-          echo "after PR creation to DEV"
+          pr=$(curl -s -X POST -H "Authorization: token $token" -d "{ \"title\": \"Merge commit from $new_branch to QA\", \"head\": \"$new_branch\", \"base\": \"QA\"}" https://api.github.com/repos/$owner/$repo/pulls)
+          echo $pr
+
+          echo "getting url of pr"
+          html_url=$(echo "$pr" | jq -r '.html_url')
+          echo $html_url
           
-          echo "I want this to appear on the workflow summary page" >> $GITHUB_STEP_SUMMARY
-          echo ${{github.sha}} >> $GITHUB_STEP_SUMMARY
+          echo "QA PR" >> $GITHUB_STEP_SUMMARY
+          echo $html_url >> $GITHUB_STEP_SUMMARY
