@@ -23,6 +23,11 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4.1.1
 
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: |
@@ -32,28 +37,29 @@ jobs:
           echo "workspace"
           echo ${{github.workspace}}
 
-          # Get the current branch
-          current_branch=$(git symbolic-ref --short HEAD)
-          echo "current branch"
-          echo $current_branch
-
-          #create a DEV branch of this hotfix branch
           # Set your variables
-          owner="mickeygousset"
+          owner="devopselvis"
           repo="working-with-branches"
           token="${{secrets.SATOKEN}}"
-          base_branch=$current_branch
-          new_branch=${current_branch}-dev
+          base_branch=${{github.head_ref}}
+          new_branch=${{github.head_ref}}-dev
+
+          echo $base_branch
+          echo $new_branch
 
           # Get the SHA of the latest commit on the base branch
-          sha=$(curl -s -H "Authorization: token $token" \
-           https://api.github.com/repos/$owner/$repo/git/ref/heads/$base_branch | jq -r '.object.sha')
+          echo "getting the sha"
+          #sha=$(curl -s -H "Authorization: token $token" https://api.github.com/repos/$owner/$repo/git/ref/heads/$base_branch | jq -r '.object.sha')
+          sha=${{github.sha}}
+          echo $sha
 
           # Create a new reference (branch) with that SHA
-          curl -X POST -H "Authorization: token $token" \
-               -d "{\"ref\": \"refs/heads/$new_branch\", \"sha\": \"$sha\"}" \
-               https://api.github.com/repos/$owner/$repo/git/refs
+          echo "creating ref branch"
+          curl -X POST -H "Authorization: token $token" -d "{\"ref\": \"refs/heads/$new_branch\", \"sha\": \"$sha\"}" https://api.github.com/repos/$owner/$repo/git/refs
+          echo "finish ref branch creation"
           
-          
-
+          # Create PR to DEV branch
+          echo "before PR creation to DEV"
+          curl -s -X POST -H "Authorization: token $token" -d "{ \"title\": \"Merge commit from $new_branch to DEV\", \"head\": \"$new_branch\", \"base\": \"DEV\"}" https://api.github.com/repos/$owner/$repo/pulls
+          echo "after PR creation to DEV"
           
