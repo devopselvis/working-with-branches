@@ -46,7 +46,7 @@ jobs:
           repo="working-with-branches"
           token="${{secrets.SATOKEN}}"
           base_branch=${{github.head_ref}}
-          new_branch=${{github.head_ref}}-dev
+          new_branch=${{github.head_ref}}-qa
 
           echo $base_branch
           echo $new_branch
@@ -64,7 +64,7 @@ jobs:
           
           # Create PR to DEV branch
           echo "before PR creation to DEV"
-          curl -s -X POST -H "Authorization: token $token" -d "{ \"title\": \"Merge commit from $new_branch to DEV\", \"head\": \"$new_branch\", \"base\": \"DEV\"}" https://api.github.com/repos/$owner/$repo/pulls
+          curl -s -X POST -H "Authorization: token $token" -d "{ \"title\": \"Merge commit from $new_branch to QA\", \"head\": \"$new_branch\", \"base\": \"QA\"}" https://api.github.com/repos/$owner/$repo/pulls
           echo "after PR creation to DEV"
           
           echo "I want this to appear on the workflow summary page" >> $GITHUB_STEP_SUMMARY
